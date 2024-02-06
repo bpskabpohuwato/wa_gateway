@@ -33,6 +33,74 @@ exports.sendMessage = async (req, res, next) => {
     next(error);
   }
 };
+exports.sendDocument = async (req, res, next) => {
+  try {
+    let to = req.body.to || req.query.to;
+    let text = req.body.text || req.query.text;
+    let isGroup = req.body.isGroup || req.query.isGroup;
+    let filename = req.body.filename || req.query.filename;
+    let media = req.body.media || req.query.media;
+    const sessionId =
+      req.body.session || req.query.session || req.headers.session;
+
+    if (!to || !text) throw new ValidationError("Missing Parameters");
+
+    const receiver = to;
+    if (!sessionId) throw new ValidationError("Session Not Founds");
+    const send = await whatsapp.sendDocument({
+      sessionId,
+      to: receiver,
+      isGroup: !!isGroup,
+      media: media,
+      filename: filename,
+      text,
+    });
+
+    res.status(200).json(
+      responseSuccessWithData({
+        id: send?.key?.id,
+        status: send?.status,
+        message: send?.message?.extendedTextMessage?.text || "Not Text",
+        remoteJid: send?.key?.remoteJid,
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+exports.sendImage = async (req, res, next) => {
+  try {
+    let to = req.body.to || req.query.to;
+    let text = req.body.text || req.query.text;
+    let isGroup = req.body.isGroup || req.query.isGroup;
+    let media = req.body.media || req.query.media;
+    const sessionId =
+      req.body.session || req.query.session || req.headers.session;
+
+    if (!to || !text) throw new ValidationError("Missing Parameters");
+
+    const receiver = to;
+    if (!sessionId) throw new ValidationError("Session Not Founds");
+    const send = await whatsapp.sendImage({
+      sessionId,
+      to: receiver,
+      isGroup: !!isGroup,
+      media: media,
+      text,
+    });
+
+    res.status(200).json(
+      responseSuccessWithData({
+        id: send?.key?.id,
+        status: send?.status,
+        message: send?.message?.extendedTextMessage?.text || "Not Text",
+        remoteJid: send?.key?.remoteJid,
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
 exports.sendBulkMessage = async (req, res, next) => {
   try {
     const sessionId =
