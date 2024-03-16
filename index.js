@@ -9,6 +9,22 @@ const MainRouter = require("./app/routers");
 const errorHandlerMiddleware = require("./app/middlewares/error_middleware");
 const whatsapp = require("wa-multi-session");
 
+var fs = require("fs");
+var util = require("util");
+const { min } = require("moment/moment");
+console.log = function() {
+  let date_ob = new Date();
+  let date = ("0" + date_ob.getDate()).slice(-2);
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  let year = date_ob.getFullYear();
+  let today = year + "-" + month + "-" + date;
+  var logFile = fs.createWriteStream("logs/" + today + ".txt", {flags: "a"});
+  var logStdout = process.stdout;
+  logFile.write(util.format.apply(null, arguments) + "\n");
+  logStdout.write(util.format.apply(null, arguments) + "\n");
+}
+console.error = console.log;
+
 config();
 
 var app = express();
@@ -34,15 +50,49 @@ server.on("listening", () => console.log("APP IS RUNNING ON PORT " + PORT));
 server.listen(PORT);
 
 whatsapp.onConnected((session) => {
-  console.log("connected => ", session);
+  let date_ob = new Date();
+  let hours = ("0" + date_ob.getHours()).slice(-2);
+  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+  let now = hours + ":" + minutes + ":" + seconds;
+/*
+  let date = ("0" + date_ob.getDate()).slice(-2);
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  let year = date_ob.getFullYear();
+  let today = year + "-" + month + "-" + date;
+*/
+  console.log(now + " connected to {" + session + "}");
 });
 
 whatsapp.onDisconnected((session) => {
-  console.log("disconnected => ", session);
+  let date_ob = new Date();
+  let hours = ("0" + date_ob.getHours()).slice(-2);
+  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+  let now = hours + ":" + minutes + ":" + seconds;
+
+  console.log(now + " disconnected from {" + session + "}");
 });
 
 whatsapp.onConnecting((session) => {
-  console.log("connecting => ", session);
+  let date_ob = new Date();
+  let hours = ("0" + date_ob.getHours()).slice(-2);
+  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+  let now = hours + ":" + minutes + ":" + seconds;
+
+  console.log(now + " connecting to {" + session + "}");
+});
+
+whatsapp.onMessageReceived((msg) => {
+/*
+  let date_ob = new Date();
+  let hours = ("0" + date_ob.getHours()).slice(-2);
+  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+  let now = hours + ":" + minutes + ":" + seconds;
+  console.log(now + " Received On : "+ msg.sessionId + " >>>", msg);
+*/
 });
 
 whatsapp.loadSessionsFromStorage();
