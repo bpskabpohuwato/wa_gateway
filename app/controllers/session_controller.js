@@ -16,6 +16,13 @@ exports.createSession = async (req, res, next) => {
     }
     whatsapp.onQRUpdated(async (data) => {
       if (res && !res.headersSent) {
+        let date_ob = new Date();
+        let hours = ("0" + date_ob.getHours()).slice(-2);
+        let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+        let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+        let now = hours + ":" + minutes + ":" + seconds;
+        console.log(now + " session request : {" + req.body.session + "}");
+    
         const qr = await toDataURL(data.qr);
         if (scan && data.sessionId == sessionName) {
           res.render("scan", { qr: qr });
@@ -28,7 +35,7 @@ exports.createSession = async (req, res, next) => {
         }
       }
     });
-    await whatsapp.startSession(sessionName, { printQR: true });
+    await whatsapp.startSession(sessionName, { printQR: false }); // printQRInTerminal
   } catch (error) {
     next(error);
   }
