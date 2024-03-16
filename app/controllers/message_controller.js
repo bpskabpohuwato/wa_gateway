@@ -14,6 +14,14 @@ exports.sendMessage = async (req, res, next) => {
 
     const receiver = to;
     if (!sessionId) throw new ValidationError("Session Not Founds");
+
+    let date_ob = new Date();
+    let hours = ("0" + date_ob.getHours()).slice(-2);
+    let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+    let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+    let now = hours + ":" + minutes + ":" + seconds;
+    console.log(now + " {" + req.body.session + "} send Message to {" + to + "}");
+
     const send = await whatsapp.sendTextMessage({
       sessionId,
       to: receiver,
@@ -47,6 +55,14 @@ exports.sendDocument = async (req, res, next) => {
 
     const receiver = to;
     if (!sessionId) throw new ValidationError("Session Not Founds");
+
+    let date_ob = new Date();
+    let hours = ("0" + date_ob.getHours()).slice(-2);
+    let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+    let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+    let now = hours + ":" + minutes + ":" + seconds;
+    console.log(now + " {" + req.body.session + "} send Message to {" + to + "}");
+
     const send = await whatsapp.sendDocument({
       sessionId,
       to: receiver,
@@ -81,6 +97,14 @@ exports.sendImage = async (req, res, next) => {
 
     const receiver = to;
     if (!sessionId) throw new ValidationError("Session Not Founds");
+
+    let date_ob = new Date();
+    let hours = ("0" + date_ob.getHours()).slice(-2);
+    let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+    let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+    let now = hours + ":" + minutes + ":" + seconds;
+    console.log(now + " {" + req.body.session + "} send Message to {" + to + "}");
+
     const send = await whatsapp.sendImage({
       sessionId,
       to: receiver,
@@ -133,7 +157,12 @@ exports.sendBulkMessage = async (req, res, next) => {
       });
       await whatsapp.createDelay(delay ?? 1000);
     }
-    console.log("SEND BULK MESSAGE WITH DELAY SUCCESS");
+    let date_ob = new Date();
+    let hours = ("0" + date_ob.getHours()).slice(-2);
+    let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+    let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+    let now = hours + ":" + minutes + ":" + seconds;
+    console.log(now + " {" + req.body.session + "} SEND BULK MESSAGES WITH DELAY SUCCESS");
   } catch (error) {
     next(error);
   }
