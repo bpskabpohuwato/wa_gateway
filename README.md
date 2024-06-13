@@ -25,7 +25,7 @@ KEY=mysupersecretkey # For Securing Some Data
 Clone the project
 
 ```bash
-  git clone https://github.com/mimamch/wa_gateway.git
+  git clone https://github.com/bpskabpohuwato/wa_gateway.git
 ```
 
 Go to the project directory
