@@ -10,6 +10,9 @@
     "name": "mimamch",
     "email": "mimamch28@gmail.com"
   },
+  "engines": {
+    "node": "12.*"
+  },
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "~1.4.4",
