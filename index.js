@@ -12,16 +12,27 @@ const whatsapp = require("wa-multi-session");
 var fs = require("fs");
 var util = require("util");
 const { min } = require("moment/moment");
+
 console.log = function() {
-  let date_ob = new Date();
-  let date = ("0" + date_ob.getDate()).slice(-2);
-  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  const dateTimeObject = new Date();
+  
+  let date_ob = new Date(dateTimeObject.getTime() + (8 * 3600 * 1000));
+  
   let year = date_ob.getFullYear();
-  let today = year + "-" + month + "-" + date;
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  let day = ("0" + date_ob.getDate()).slice(-2);
+  let today = year + "-" + month + "-" + day;
+
+  let hours = ("0" + date_ob.getHours()).slice(-2);
+  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
+  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
+  let now = hours + ":" + minutes + ":" + seconds;
+
   var logFile = fs.createWriteStream("logs/" + today + ".txt", {flags: "a"});
   var logStdout = process.stdout;
-  logFile.write(util.format.apply(null, arguments) + "\n");
-  logStdout.write(util.format.apply(null, arguments) + "\n");
+
+  logFile.write(now + "\n" + util.format.apply(null, arguments) + "\n");
+  logStdout.write(now + "\n" + util.format.apply(null, arguments) + "\n");
 }
 console.error = console.log;
 
@@ -50,48 +61,20 @@ server.on("listening", () => console.log("APP IS RUNNING ON PORT " + PORT));
 server.listen(PORT);
 
 whatsapp.onConnected((session) => {
-  let date_ob = new Date();
-  let hours = ("0" + date_ob.getHours()).slice(-2);
-  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
-  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
-  let now = hours + ":" + minutes + ":" + seconds;
-/*
-  let date = ("0" + date_ob.getDate()).slice(-2);
-  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-  let year = date_ob.getFullYear();
-  let today = year + "-" + month + "-" + date;
-*/
-  console.log(now + " connected to {" + session + "}");
+  console.log("connected to {" + session + "}");
 });
 
 whatsapp.onDisconnected((session) => {
-  let date_ob = new Date();
-  let hours = ("0" + date_ob.getHours()).slice(-2);
-  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
-  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
-  let now = hours + ":" + minutes + ":" + seconds;
-
-  console.log(now + " disconnected from {" + session + "}");
+  console.log("disconnected from {" + session + "}");
 });
 
 whatsapp.onConnecting((session) => {
-  let date_ob = new Date();
-  let hours = ("0" + date_ob.getHours()).slice(-2);
-  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
-  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
-  let now = hours + ":" + minutes + ":" + seconds;
-
-  console.log(now + " connecting to {" + session + "}");
+  console.log("connecting to {" + session + "}");
 });
 
 whatsapp.onMessageReceived((msg) => {
 /*
-  let date_ob = new Date();
-  let hours = ("0" + date_ob.getHours()).slice(-2);
-  let minutes = ("0" + date_ob.getMinutes()).slice(-2);
-  let seconds = ("0" + date_ob.getSeconds()).slice(-2);
-  let now = hours + ":" + minutes + ":" + seconds;
-  console.log(now + " Received On : "+ msg.sessionId + " >>>", msg);
+  console.log("Received On : "+ msg.sessionId + " >>>", msg);
 */
 });
 
