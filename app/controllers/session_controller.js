@@ -10,18 +10,13 @@ exports.createSession = async (req, res, next) => {
   try {
     const scan = req.query.scan;
     const sessionName =
-      req.body.session || req.query.session || req.headers.session;
+      req.query.session || req.body.session || req.headers.session;
     if (!sessionName) {
       throw new Error("Bad Request");
     }
     whatsapp.onQRUpdated(async (data) => {
       if (res && !res.headersSent) {
-        let date_ob = new Date();
-        let hours = ("0" + date_ob.getHours()).slice(-2);
-        let minutes = ("0" + date_ob.getMinutes()).slice(-2);
-        let seconds = ("0" + date_ob.getSeconds()).slice(-2);
-        let now = hours + ":" + minutes + ":" + seconds;
-        console.log(now + " session request : {" + req.body.session + "}");
+        console.log("session request : {" + req.body.session + "}");
     
         const qr = await toDataURL(data.qr);
         if (scan && data.sessionId == sessionName) {
@@ -43,7 +38,7 @@ exports.createSession = async (req, res, next) => {
 exports.deleteSession = async (req, res, next) => {
   try {
     const sessionName =
-      req.body.session || req.query.session || req.headers.session;
+      req.query.session || req.body.session || req.headers.session;
     if (!sessionName) {
       throw new ValidationError("session Required");
     }
@@ -57,7 +52,7 @@ exports.deleteSession = async (req, res, next) => {
 };
 exports.sessions = async (req, res, next) => {
   try {
-    const key = req.body.key || req.query.key || req.headers.key;
+    const key = req.query.key || req.body.key || req.headers.key;
 
     // is KEY provided and secured
     if (process.env.KEY && process.env.KEY != key) {
