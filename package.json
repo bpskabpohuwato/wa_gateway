@@ -1,5 +1,5 @@
 {
-  "name": "wa-gateway",
+  "name": "express-wa-gateway",
   "version": "3.2.2",
   "scripts": {
     "start": "node index.js",
